@@ -10,15 +10,12 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id = null;
+	private Integer idUsers = null;
 	
 	private String name;
 	private String lastname;
-	private Integer agence;
-	private Float nbjours;
-	private String formation;
-	private String lieuFormation;
-	private String organisme;
+	private String agence;
+
 	
 	public User(){
 		
@@ -26,14 +23,12 @@ public class User {
 	
 	
 	
-	public String getLieuFormation() {
-		return lieuFormation;
+	
+	public Integer getIdUsers() {
+		return idUsers;
 	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdUsers(Integer idUsers) {
+		this.idUsers = idUsers;
 	}
 	public String getName() {
 		return name;
@@ -47,41 +42,17 @@ public class User {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-	public Integer getAgence() {
+	public String getAgence() {
 		return agence;
 	}
-	public void setAgence(Integer agence) {
+	public void setAgence(String agence) {
 		this.agence = agence;
 	}
-	public Float getNbjours() {
-		return nbjours;
-	}
-	public void setNbjours(Float nbjours) {
-		this.nbjours = nbjours;
-	}
-	public String getFormation() {
-		return formation;
-	}
-	public void setFormation(String formation) {
-		this.formation = formation;
-	}
-	public void setLieuFormation(String lieuFormation) {
-		this.lieuFormation = lieuFormation;
-	}
-	public String getOrganisme() {
-		return organisme;
-	}
-	public void setOrganisme(String organisme) {
-		this.organisme = organisme;
-	}
-
-
+	
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", lastname=" + lastname + ", agence=" + agence + ", nbjours="
-				+ nbjours + ", formation=" + formation + ", lieuFormation=" + lieuFormation + ", organisme=" + organisme
-				+ "]";
+		return "User [id=" + idUsers + ", name=" + name + ", lastname=" + lastname + ", agence=" + agence + "]";
 	}
 	
 	

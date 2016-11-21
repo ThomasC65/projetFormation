@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Formation;
 import entities.User;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,7 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ImportXlsDao {
 
-	public static void toto() throws IOException {
+	public static void readEntierFile() throws IOException {
 		// TODO Auto-generated method stub
 		File excel = new File("C:/code/workspace/formation/sopra-modified.xlsx");
 		FileInputStream fis = new FileInputStream(excel);
@@ -64,19 +67,7 @@ public class ImportXlsDao {
 				user.setLastname(cLastname.toString());
 
 				Cell cAgence = r.getCell(1);
-				user.setAgence(Float.valueOf(cAgence.toString()).intValue());
-
-				Cell cNbjours = r.getCell(2);
-				user.setNbjours(Float.valueOf(cNbjours.toString()));
-
-				Cell cFormation = r.getCell(5);
-				user.setFormation(cFormation.toString());
-
-				Cell cLieuFormation = r.getCell(6);
-				user.setLieuFormation(cLieuFormation.toString());
-
-				Cell cOrganisme = r.getCell(9);
-				user.setOrganisme(cOrganisme.toString());
+				user.setAgence(cAgence.toString());
 
 				datausers.add(user);
 
@@ -94,4 +85,53 @@ public class ImportXlsDao {
 
 	}
 
+	public static List<Formation> formation() throws IOException {
+
+		File excel = new File("C:/code/workspace/formation/sopra-modified.xlsx");
+		FileInputStream fis = new FileInputStream(excel);
+		XSSFWorkbook wb = new XSSFWorkbook(fis);
+		XSSFSheet ws = wb.getSheet("Suivi");
+
+		int rowNum = ws.getLastRowNum() + 1;
+		int colNum = ws.getRow(0).getLastCellNum();
+		String[][] data = new String[rowNum][colNum];
+
+		Formation formation = new Formation();
+		List<Formation> dataformation = new ArrayList<Formation>();
+		
+		for (Row r : ws) {
+
+			try {
+
+
+				Cell cNbjours = r.getCell(2);
+				formation.setNbjours(BigDecimal.valueOf(cNbjours.toString()));
+
+				Cell cFormation = r.getCell(5);
+				formation.setFormation(cFormation.toString());
+
+				Cell cLieuFormation = r.getCell(6);
+				formation.setLieuFormation(cLieuFormation.toString());
+
+				Cell cOrganisme = r.getCell(9);
+				formation.setOrganisme(cOrganisme.toString());
+
+				dataformation.add(formation);
+
+				// user.setAgence(cLastname.toString());
+
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+			}
+
+			System.out.println(formation);
+		}
+
+		// System.out.println(datausers);
+		return dataformation;
+
+		
+		
+	}
+		
 }

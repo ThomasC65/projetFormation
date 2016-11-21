@@ -11,7 +11,7 @@ public class ImportXlsApplication {
 
 	 public static void main(String[] args) throws IOException {
 		 
-		  //ImportXlsDao.toto();
+		  //ImportXlsDao.readEntierFile();
 		  ImportXlsDao.users();
 		 
 		 
