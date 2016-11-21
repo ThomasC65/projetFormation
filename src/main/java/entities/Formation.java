@@ -1,12 +1,16 @@
 package entities;
 
+
 import java.math.BigDecimal;
+import java.util.Date;
 
-
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
+@Entity
 public class Formation {
 
 	@Id
@@ -17,6 +21,7 @@ public class Formation {
 	private String formation;
 	private String lieuFormation;
 	private String organisme;
+	private Date dateReel;
 	
 	
 	public Integer getIdFormation() {
@@ -81,9 +86,21 @@ public class Formation {
 	
 	@Override
 	public String toString() {
-		return "Formation [id=" + idFormation + ", nbjours="
-				+ nbjours + ", formation=" + formation + ", lieuFormation=" + lieuFormation + ", organisme=" + organisme
+		return "Formation [id=" + idFormation + ", dateReel="
+				+ dateReel + ", nbjours="+ nbjours + ", formation=" + formation + ", lieuFormation=" + lieuFormation + ", organisme=" + organisme
 				+ "]";
+	}
+
+
+
+	public Date getDateReel() {
+		return dateReel;
+	}
+
+
+
+	public void setDateReel(Date dateReel) {
+		this.dateReel = dateReel;
 	}
 	
 }

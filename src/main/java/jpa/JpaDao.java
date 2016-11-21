@@ -1,5 +1,6 @@
 package jpa;
 
+import entities.Formation;
 import entities.User;
 
 public class JpaDao {
@@ -9,5 +10,12 @@ public class JpaDao {
 			em.persist(u);
 		});
 	}
+	
+	public void createFormation(Formation f){
+		EmFactory.voidTransaction(em -> {
+			em.persist(f);
+		});
+	}
+	
 	
 }
