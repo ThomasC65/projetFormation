@@ -22,6 +22,7 @@ public class Formation {
 	private String lieuFormation;
 	private String organisme;
 	private Date dateReel;
+	private Date dateAttendue;
 	
 	
 	public Integer getIdFormation() {
@@ -101,6 +102,18 @@ public class Formation {
 
 	public void setDateReel(Date dateReel) {
 		this.dateReel = dateReel;
+	}
+
+
+
+	public Date getDateAttendue() {
+		return dateAttendue;
+	}
+
+
+
+	public void setDateAttendue(Date dateAttendue) {
+		this.dateAttendue = dateAttendue;
 	}
 	
 }

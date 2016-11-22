@@ -5,10 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+
 
 import entities.Formation;
 import entities.User;
@@ -23,10 +26,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ImportXlsDao {
 
-	
 	@PersistenceContext
-	EntityManager em;
-	
+	static EntityManager em;
+
 	public static void readEntierFile() throws IOException {
 		// TODO Auto-generated method stub
 		File excel = new File("C:/code/workspace/formation/sopra-modified.xlsx");
@@ -50,7 +52,7 @@ public class ImportXlsDao {
 	}
 
 	public static List<User> users() throws IOException {
-		
+
 		EntityManager em = EmFactory.createEntityManager();
 
 		File excel = new File("C:/code/workspace/formation/sopra-modified.xlsx");
@@ -58,16 +60,14 @@ public class ImportXlsDao {
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
 		XSSFSheet ws = wb.getSheet("Suivi");
 
-		int rowNum = ws.getLastRowNum() + 1;
-		int colNum = ws.getRow(0).getLastCellNum();
-		String[][] data = new String[rowNum][colNum];
-
-
 		List<User> datausers = new ArrayList<User>();
 
 		for (Row r : ws) {
+
 			User user = new User();
+
 			try {
+
 				Cell cName = r.getCell(7);
 				user.setName(cName.toString());
 
@@ -77,8 +77,6 @@ public class ImportXlsDao {
 				Cell cAgence = r.getCell(1);
 				user.setAgence(cAgence.toString());
 
-
-
 				// user.setAgence(cLastname.toString());
 
 			} catch (Exception ex) {
@@ -86,24 +84,31 @@ public class ImportXlsDao {
 			}
 
 			datausers.add(user);
-			
+
 			em.getTransaction().begin();
-			em.persist(user);
+
+			@SuppressWarnings("unchecked")
+			List<User> a = (List<User>) em
+					.createQuery(
+							"SELECT u from User u WHERE u.name=:name AND u.lastname=:lastname AND u.agence=:agence")
+					.setParameter("name", user.getName()).setParameter("lastname", user.getLastname())
+					.setParameter("agence", user.getAgence()).getResultList();
+
+			if (a.isEmpty()
+					&& (user.getName() != null || user.getLastname() != null || user.getAgence() != null)
+					&& !(user.getName().isEmpty() || user.getLastname().isEmpty() || user.getAgence().isEmpty())) {
+				em.persist(user);
+			}
+
 			em.getTransaction().commit();
 
-			
-			//System.out.println(user);
+			// System.out.println(user);
 
 		}
-		//System.out.println(datausers.size());
+		// System.out.println(datausers.size());
 		// System.out.println(datausers);
-		
-		
 		em.close();
 
-
-
-		
 		return datausers;
 
 	}
@@ -116,20 +121,15 @@ public class ImportXlsDao {
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
 		XSSFSheet ws = wb.getSheet("Suivi");
 
-		int rowNum = ws.getLastRowNum() + 1;
-		int colNum = ws.getRow(0).getLastCellNum();
-		String[][] data = new String[rowNum][colNum];
-
-
 		List<Formation> dataformation = new ArrayList<Formation>();
-		
+
 		for (Row r : ws) {
 			Formation formation = new Formation();
 			try {
 
 				Cell cDateReel = r.getCell(3);
 				formation.setDateReel(cDateReel.getDateCellValue());
-				
+
 				Cell cNbjours = r.getCell(2);
 				BigDecimal bdNbjours = new BigDecimal(cNbjours.toString());
 				formation.setNbjours(bdNbjours);
@@ -142,6 +142,10 @@ public class ImportXlsDao {
 
 				Cell cOrganisme = r.getCell(9);
 				formation.setOrganisme(cOrganisme.toString());
+				
+				Cell cDateAttendue = r.getCell(4);
+				formation.setDateAttendue(cDateAttendue.getDateCellValue());
+				
 
 				dataformation.add(formation);
 
@@ -150,22 +154,54 @@ public class ImportXlsDao {
 			} catch (Exception ex) {
 				// ex.printStackTrace();
 			}
+
 			em2.getTransaction().begin();
-			em2.persist(formation);
+
+			@SuppressWarnings("unchecked")
+			List<Formation> b = (List<Formation>) em2
+					.createQuery(
+							"SELECT f from Formation f WHERE f.nbjours=:nbjours AND f.formation=:formation AND f.lieuFormation=:lieuFormation AND f.organisme=:organisme AND f.dateReel=:dateReel AND f.dateAttendue=:dateAttendue")
+					.setParameter("nbjours", formation.getNbjours())
+					.setParameter("formation", formation.getFormation())
+					.setParameter("lieuFormation", formation.getLieuFormation())
+					.setParameter("organisme", formation.getOrganisme())
+					.setParameter("dateReel", formation.getDateReel())
+					.setParameter("dateAttendue", formation.getDateAttendue())
+					.getResultList();
+
+
+			if (b.isEmpty() ){
+					//&& (!(formation.getFormation().isEmpty() || formation.getLieuFormation().isEmpty())
+				//|| (formation.getNbjours() != null || formation.getFormation() != null || formation.getLieuFormation() != null || formation.getDateReel() != null || formation.getDateAttendue()!=null))){
+				em2.persist(formation);
+			}
+
 			em2.getTransaction().commit();
 
-
-			//System.out.println(formation);
+			// System.out.println(formation);
 		}
-		//System.out.println(dataformation.size());
+		// System.out.println(dataformation.size());
 		// System.out.println(datausers);
 
-
 		em2.close();
-
 
 		EmFactory.getInstance().close();
 		return dataformation;
 	}
-		
+
+	
+
+	/*
+	 * public static List<DemandeFormation> demandeFormation() throws
+	 * IOException {
+	 * 
+	 * List<DemandeFormation> dataDemandeFormation = new
+	 * ArrayList<DemandeFormation>();
+	 * 
+	 * 
+	 * return dataDemandeFormation;
+	 * 
+	 * }
+	 */
+
 }
