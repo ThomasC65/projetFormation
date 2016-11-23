@@ -2,34 +2,18 @@ package importxls;
 
 import java.io.IOException;
 
-
-import poidao.ImportXlsDao;
-
-
-
+import poidao.TestThomas;
 
 public class ImportXlsApplication {
 
-	 public static void main(String[] args) throws IOException {
-		 
-		 
+	public static void main(String[] args) throws IOException {
 
-		 
-		 
-		ImportXlsDao.users();
+		TestThomas tt = new TestThomas();
 
-		ImportXlsDao.formation();
+		tt.readEntierFile();
 
-		
+		// ImportXlsDao.users();
 
-
-
-
-		 
-	    }
-
-
-
-
+	}
 
 }
